@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <span><a href="/">BlogApp</a></span>
+        <span
+          ><a href="/users/register"> <button class="btn">Sign Up</button> </a>
+          <a href="/articles/new"> </a
+        ></span>
+      </nav>
+    </header>
+    <main>
+      <h1>Login</h1>
+      <% if(ep){ %>
+      <p><%= ep %></p>
+      <% } %> <% if(email){ %>
+      <p><%= email %></p>
+      <% } %> <% if(password){ %> <%= password %> <% } %>
+      <form action="/users/login" method="POST">
+        <input type="email" name="email" id="email" placeholder="Enter Enail" />
+        <input type="text" name="password" placeholder="Enter Password" />
+        <input type="submit" value="Login" />
+      </form>
+    </main>
+  </body>
+</html>
