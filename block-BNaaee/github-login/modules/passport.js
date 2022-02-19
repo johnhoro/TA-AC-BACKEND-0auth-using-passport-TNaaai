@@ -1,6 +1,6 @@
 var passport = require(`passport`);
 var GitHubStrategy = require(`passport-github`).Strategy;
-var GitHubStrategy = require(`passport-google-oauth20`).Strategy;
+var GoogleStrategy = require(`passport-google-oauth20`).Strategy;
 
 var User = require(`../models/user`);
 
@@ -27,7 +27,7 @@ passport.use(
             return done(null, addedUser);
           });
         } else {
-          done(null, user);
+          return done(null, user);
         }
       });
     }
@@ -35,7 +35,7 @@ passport.use(
 );
 
 passport.use(
-  new GitHubStrategy(
+  new GoogleStrategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
