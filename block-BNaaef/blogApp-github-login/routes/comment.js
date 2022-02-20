@@ -1,63 +1,71 @@
 var express = require("express");
-
 var router = express.Router();
-
-var User = require("../models/user");
 var Article = require("../models/article");
 var Comment = require("../models/comment");
+var Users = require("../models/user");
 var auth = require("../middlewares/auth");
 
-router.use(auth.loggedInUser);
-
-router.get("/:id/edit", (req, res, next) => {
+router.get("/:id/commentlike", (req, res, next) => {
   var id = req.params.id;
-  Comment.findById(id)
-    .populate("author", "fullName")
-    .exec((err, comment) => {
-      if (comment.author.id !== req.user.id) {
-        return res.redirect("/articles/" + comment.articleId);
-      }
-      res.render("updateComment", { comment });
-    });
-});
-
-router.post("/:id", (req, res, next) => {
-  var id = req.params.id;
-  Comment.findById(id)
-    .populate("author", "username")
-    .exec((err, comment) => {
-      if (err) return next(err);
-      if (comment.author.id !== req.user.id) {
-        return res.redirect("/articles/" + comment.articleId);
-      }
-      Comment.findByIdAndUpdate(id, req.body, (err, commentUpdated) => {
-        if (err) return next(err);
-        return res.redirect("/articles/" + commentUpdated.articleId);
-      });
-    });
-});
-
-router.get("/:id/delete", (req, res, next) => {
-  var id = req.params.id;
-  Comment.findById(id)
-    .populate("author", "fulllName")
-    .exec((err, comment) => {
-      if (err) return next(err);
-      if (comment.author.id !== req.user.id) {
-        return res.redirect("/articles/" + comment.articleId);
-      }
-      Comment.findByIdAndDelete(id, (err, commentDeleted) => {
-        if (err) return next(err);
-        return res.redirect("/articles/" + commentDeleted.articleId);
-      });
-    });
-});
-
-router.get("/:id/like", (req, res, next) => {
-  var id = req.params.id;
-  Comment.findByIdAndUpdate(id, { $inc: { likes: 1 } }, (err, liked) => {
+  console.log(id);
+  Comment.findOne({ _id: req.params.id, like: { $in: id } }, (err, content) => {
+    console.log(content);
     if (err) return next(err);
-    return res.redirect("/articles/" + liked.articleId);
+    let isAlreadyAdded = {
+      $pull: { like: id },
+    };
+
+    if (!content) {
+      isAlreadyAdded = {
+        $push: { like: id },
+      };
+    }
+
+    Comment.findOneAndUpdate(
+      { _id: req.params.id },
+      isAlreadyAdded,
+      { new: true },
+      (err, updateContent) => {
+        if (err) return next(err);
+        res.redirect("/article/" + updateContent.aticleId._id + "/detail");
+      }
+    );
+  });
+});
+
+router.get("/:id/commentedit", auth.CommentInfo, (req, res, next) => {
+  Comment.findById(req.params.id, (err, content) => {
+    if (err) return next(err);
+    res.render("editComment", { data: content });
+  });
+});
+
+router.post("/:id/commentedit", (req, res, next) => {
+  console.log("hi");
+  Comment.findByIdAndUpdate(
+    req.params.id,
+    req.body,
+    { new: true },
+    (err, updateContent) => {
+      if (err) return next(err);
+      res.redirect("/article/" + updateContent.aticleId._id + "/detail");
+    }
+  );
+});
+
+router.get("/:id/commentdelete", auth.CommentInfo, (req, res, next) => {
+  console.log("deleter");
+  Comment.findByIdAndDelete(req.params.id, (err, content) => {
+    if (err) return next(err);
+    Article.findByIdAndUpdate(
+      content.aticleId,
+      { $pull: { remarks: content._id } },
+      (err, updateEvent) => {
+        if (err) return next(err);
+        console.log(updateEvent);
+        res.redirect("/article/" + updateEvent.slug);
+      }
+    );
   });
 });
 

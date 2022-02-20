@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/stylesheet/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <div class="container flex space-between">
+        <a href="/">Home</a>
+        <nav>
+          <ul class="flex navbar">
+            <li>
+              <a href="/article">Articles</a>
+            </li>
+            <%if(user){%>
+            <li><a href="#"> <%= user.fullName()%></a></li>
+            <li>
+              <a href="/article/new">Add Article</a>
+            </li>
+            <li>
+              <a href="/users/logout">Logout</a>
+            </li>
+            <%}else{ %>
+            <li>
+              <a href="/users/signup">Sign Up</a>
+            </li>
+            <li>
+              <a href="/users/login">Login</a>
+            </li>
+            <%}%>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="container">
+        <h2><%= data.title %></h2>
+        <p><%= data.description %></p>
+        <p><%= data.likes %></p>
+        <a href="/article/<%= data.slug%>/like">like</a>
+        <p><%= data.author%></p>
+
+        <% if (user) { %>
+
+        <a href="/article/<%= data._id %>/edit"
+          ><button class="edit-btn">Edit</button>
+        </a>
+        <a href="/article/<%= data._id%>/delete">
+          <button class="edit-btn">Delete</button>
+        </a>
+        <% } %>
+        <form
+          action="/article/<%= data._id%>/comment"
+          class="comment"
+          method="POST"
+        >
+          <input type="text" placeholder="enter author" name="name" />
+          <input type="text" name="title" placeholder="Enter comment" />
+          <button class="btn" type="submit">Add comment</button>
+        </form>
+        <div>
+          <h5>Comments</h5>
+          <% data.comments.forEach(elem => { %>
+          <div>
+            <h5><%= elem.name %></h5>
+            <span><%= elem.title %></span>
+            <a href="/comment/<%= elem._id%>/commentlike">like</a>
+            <span><%= elem.like.length%></span>
+            <a href="/comment/<%= elem._id%>/commentedit">edit</a>
+            <a href="/comment/<%= elem._id%>/commentdelete">delete</a>
+          </div>
+          <%}) %>
+        </div>
+      </div>
+    </main>
+  </body>
+</html>

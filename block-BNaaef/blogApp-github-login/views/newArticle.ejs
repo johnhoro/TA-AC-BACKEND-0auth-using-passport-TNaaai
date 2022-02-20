@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/stylesheet/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <div class="container flex space-between">
+        <a href="/">Home</a>
+        <nav>
+          <ul class="flex navbar">
+            <li><a href="#"> <%= user.fullName()%></a></li>
+            <li>
+              <a href="/article">Articles</a>
+            </li>
+            <%if(user){%>
+            <li>
+              <a href="/article/new">Add article</a>
+            </li>
+            <li>
+              <a href="/users/logout">Logout</a>
+            </li>
+            <%}else{ %>
+            <a href="/users/signup">signup</a>
+            <a href="/users/login">login</a>
+            <%}%>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <div class="login-box">
+      <h2>Add new Article</h2>
+      <form action="/article" class="form" method="POST">
+        <input type="text" name="title" placeholder="Enter Title" />
+        <textarea
+          name="description"
+          rows="10"
+          placeholder="Write Something"
+        ></textarea>
+        <input type="submit" />
+      </form>
+    </div>
+  </body>
+</html>

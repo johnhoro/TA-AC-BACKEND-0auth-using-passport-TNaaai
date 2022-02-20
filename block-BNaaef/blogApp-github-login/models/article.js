@@ -1,18 +1,24 @@
-var mongoose = require(`mongoose`);
-
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 
 var articleSchema = new Schema(
   {
     title: { type: String, required: true },
     description: { type: String, required: true },
-    tags: [String],
-    author: String,
-    likes: { type: Number, default: 0 },
+    likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
     comments: [{ type: Schema.Types.ObjectId, ref: "Comment" }],
+    authorId: { type: mongoose.Types.ObjectId, ref: "User" },
+    slug: String,
   },
   { timestamps: true }
 );
+
+articleSchema.pre("save", function (next) {
+  let random = Math.floor(Math.random() * 10);
+  let str = this.title.split(" ").join("-").trim().concat(random);
+  this.slug = str;
+  next();
+});
 
 var Article = mongoose.model(`Article`, articleSchema);
 

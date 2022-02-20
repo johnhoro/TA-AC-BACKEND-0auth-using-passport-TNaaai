@@ -1,31 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Login</title>
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/stylesheet/style.css" />
+    <title>Handeling Forms 👇</title>
   </head>
-  <body>
+  <body class="home-index">
     <header>
-      <nav class="nav">
-        <span><a href="/">BlogApp</a></span>
-        <span
-          ><a href="/users/register"> <button class="btn">Sign Up</button> </a>
-          <a href="/articles/new"> </a
-        ></span>
-      </nav>
+      <div class="container flex space-between">
+        <a href="/">Home</a>
+        <nav>
+          <ul class="flex navbar">
+            <li>
+              <a href="/article">Articles</a>
+            </li>
+            <%if(user){%>
+            <li>
+              <a href="/article/new">add article</a>
+            </li>
+            <li>
+              <a href="/users/logout">logout</a>
+            </li>
+            <%}else{ %>
+            <li>
+              <a href="/users/signup">Sign Up</a>
+            </li>
+            <li>
+              <a href="/users/login">Login</a>
+            </li>
+            <%}%>
+          </ul>
+        </nav>
+      </div>
     </header>
     <main>
-      <h1>Login</h1>
-      <% if(ep){ %>
-      <p><%= ep %></p>
-      <% } %> <% if(email){ %>
-      <p><%= email %></p>
-      <% } %> <% if(password){ %> <%= password %> <% } %>
-      <form action="/users/login" method="POST">
-        <input type="email" name="email" id="email" placeholder="Enter Enail" />
-        <input type="text" name="password" placeholder="Enter Password" />
-        <input type="submit" value="Login" />
-      </form>
+      <section>
+        <div class="container">
+          <div class="login-box">
+            <h1>Sign in</h1>
+            <form action="/users/login" class="form" method="POST">
+              <% if (ep) { %>
+              <p class="red"><%= ep %></p>
+              <% } %> <% if (email) { %>
+              <p class="red"><%= email %></p>
+              <% } %> <% if (password) { %>
+              <p class="red"><%= password %></p>
+              <% } %>
+              <label for="text">Email</label>
+              <input
+                id="text"
+                type="email"
+                name="email"
+                placeholder="arya@stark.com"
+              />
+              <label for="text">Password</label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="Enter your password"
+              />
+              <input class="btn" type="submit" />
+            </form>
+            <hr />
+            <p class="center">
+              Don't have an account? <a href="/users/signup">Sign up</a>
+            </p>
+            <div class="github-box">
+              <a href="/auth/github">Login with Github</a>
+              <a href="/auth/google">Login with Google</a>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   </body>
 </html>
