@@ -3,11 +3,12 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var mongoose = require("mongoose");
 var session = require("express-session");
-var MongoStore = require("connect-mongo")(session);
+var mongoose = require("mongoose");
 var flash = require("connect-flash");
+var MongoStore = require("connect-mongo")(session);
 var passport = require("passport");
+var auth = require("./middlewares/auth");
 
 require("dotenv").config();
 
@@ -15,19 +16,21 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var articleRouter = require("./routes/article");
 var commentRouter = require("./routes/comment");
-var auth = require("./middlewares/auth");
+var authRouter = require("./routes/auth");
+
+//connected to db
 
 mongoose.connect(
-  "mongodb://localhost/passportblog",
+  "mongodb://localhost/blogApp-github-login",
   { useNewUrlParser: true, useUnifiedTopology: true },
   (err) => {
-    console.log("Connected..", err ? false : true);
+    console.log(err ? err : "Connected to database");
   }
 );
 
-require("./modules/passport");
-
 var app = express();
+
+require("./modules/passport");
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -37,6 +40,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(
@@ -49,6 +53,7 @@ app.use(
 );
 
 app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(flash());
 
@@ -56,8 +61,9 @@ app.use(auth.userInfo);
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
-app.use("/articles", articleRouter);
-app.use("/comments", commentRouter);
+app.use("/article", articleRouter);
+app.use("/comment", commentRouter);
+app.use("/auth", authRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
