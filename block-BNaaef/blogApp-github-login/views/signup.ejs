@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/stylesheet/style.css" />
+    <title>Handeling Forms 👇</title>
+  </head>
+  <body class="home-index">
+    <header>
+      <div class="container flex space-between">
+        <a href="/">Home</a>
+        <nav>
+          <ul class="flex navbar">
+            <%if(!user) { %>
+            <li>
+              <a href="/users/login">Login</a>
+            </li>
+            <li>
+              <a href="/article">Articles</a>
+            </li>
+            <%}%>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="login-box">
+        <h1>Create an account</h1>
+        <form action="/users/signup" class="form" method="POST">
+          <% if (exist) { %>
+          <p class="red"><%= exist %></p>
+          <% } %> <% if (min) { %>
+          <p class="red"><%= min %></p>
+          <% } %>
+          <label for="firstname">First Name</label>
+          <input
+            type="text"
+            name="firstname"
+            placeholder="first name"
+            id="firstname"
+          />
+          <label for="lastname">Last Name</label>
+          <input
+            type="text"
+            name="lastname"
+            placeholder="last name"
+            id="lastname"
+          />
+          <label for="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="enter email"
+          />
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            name="password"
+            placeholder="Enter your password"
+          />
+          <label for="city">city</label>
+          <input
+            type="text"
+            name="city"
+            id="city"
+            placeholder="enter your city"
+          />
+          <input class="submit-btn" type="submit" />
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

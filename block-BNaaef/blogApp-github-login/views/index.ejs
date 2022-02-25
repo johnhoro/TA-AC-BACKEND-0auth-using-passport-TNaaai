@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/stylesheet/style.css" />
+  </head>
+  <body class="home-index">
+    <header>
+      <div class="container flex space-between">
+        <a href="/">Home</a>
+        <ul class="flex space-between navbar">
+          <li>
+            <a href="/article"> List Of Article </a>
+          </li>
+          <%if(user){%>
+          <li><a href="#"> <%= user.fullName()%></a></li>
+          <li>
+            <a href="/article/new"> Add Article </a>
+          </li>
+          <li><a href="/users/logout">logout</a></li>
+          <%}else{ %>
+          <li>
+            <a href="/users/signup"> Signup </a>
+          </li>
+          <li>
+            <a href="/users/login"> Login </a>
+          </li>
+          <%}%>
+        </ul>
+      </div>
+    </header>
+    <main>
+      <div class="container center">
+        <h1>Welcome to Node.js</h1>
+        <p>Express assignment</p>
+      </div>
+    </main>
+  </body>
+</html>

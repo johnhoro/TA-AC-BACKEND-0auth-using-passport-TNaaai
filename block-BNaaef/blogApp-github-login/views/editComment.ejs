@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/stylesheet/style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <div class="container flex space-between">
+        <a href="/">Home</a>
+        <nav>
+          <ul class="flex navbar">
+            <li>
+              <a href="/article">Articles</a>
+            </li>
+            <%if(user){%>
+            <li>
+              <a href="/article/new">Add Article</a>
+            </li>
+            <li>
+              <a href="/users/logout">Logout</a>
+            </li>
+            <%}else{ %>
+            <a href="/users/signup">signup</a>
+            <a href="/users/login">login</a>
+            <%}%>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <div class="container login-box">
+        <h1>Edit Comments</h1>
+        <form
+          action="/comment/<%= data._id%>/commentedit"
+          class="form"
+          method="POST"
+        >
+          <input
+            type="text"
+            placeholder="enter author"
+            name="name"
+            value="<%= data.name %>"
+          />
+          <input
+            type="text"
+            name="title"
+            placeholder="enter comemnt"
+            value="<%= data.title %>"
+          />
+          <input type="submit" />
+        </form>
+      </div>
+    </main>
+  </body>
+</html>
